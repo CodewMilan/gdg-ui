@@ -7,6 +7,7 @@ interface Participant {
   rank: number;
   name: string;
   profile_icon: string;
+  profile_link: string;
   points: number;
   badges: number;
   last_updated: string;
@@ -24,9 +25,12 @@ export default function LeaderboardTable({ participants, searchQuery = '' }: Lea
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
   const filteredParticipants = useMemo(() => {
-    if (!searchQuery) return participants;
+    // First filter to only show participants with rank <= 100
+    const top100RankedParticipants = participants.filter(participant => participant.rank <= 100);
     
-    return participants.filter(participant =>
+    if (!searchQuery) return top100RankedParticipants;
+    
+    return top100RankedParticipants.filter(participant =>
       participant.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [participants, searchQuery]);
@@ -115,6 +119,9 @@ export default function LeaderboardTable({ participants, searchQuery = '' }: Lea
                   </svg>
                 </div>
               </th>
+              <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-white uppercase tracking-wider">
+                Profile
+              </th>
               <th
                 onClick={() => handleSort('name')}
                 className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-blue-700 transition-colors"
@@ -174,6 +181,27 @@ export default function LeaderboardTable({ participants, searchQuery = '' }: Lea
                   {(participant.rank)}
                 </td>
                 <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-sm text-gray-900">
+                  <div className="flex items-center justify-center">
+                    {participant.profile_icon && participant.profile_icon.trim() !== '' ? (
+                      <img 
+                        src={participant.profile_icon} 
+                        alt={`${participant.name} profile`}
+                        className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover border-2 border-gray-200"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNGM0Y0RjYiLz4KPHBhdGggZD0iTTIwIDIwQzIyLjc2MTQgMjAgMjUgMTcuNzYxNCAyNSAxNUMyNSAxMi4yMzg2IDIyLjc2MTQgMTAgMjAgMTBDMTcuMjM4NiAxMCAxNSAxMi4yMzg2IDE1IDE1QzE1IDE3Ljc2MTQgMTcuMjM4NiAyMCAyMCAyMFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHBhdGggZD0iTTIwIDIyQzE1LjU4MTcgMjIgMTIgMjUuNTgxNyAxMiAzMEgzMkMzMiAyNS41ODE3IDI4LjQxODMgMjIgMjAgMjJaIiBmaWxsPSIjOUNBM0FGIi8+Cjwvc3ZnPgo=';
+                        }}
+                      />
+                    ) : (
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-200 border-2 border-gray-200 flex items-center justify-center">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                </td>
+                <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-sm text-gray-900">
                   <div className="flex items-center">
                     <span className="font-medium text-xs sm:text-sm">{participant.name}</span>
                   </div>
@@ -188,9 +216,14 @@ export default function LeaderboardTable({ participants, searchQuery = '' }: Lea
                   {getRankChangeIndicator(participant.increments_decrements)}
                 </td>
                 <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-sm font-medium">
-                  <button className="inline-flex items-center px-2 sm:px-4 py-1.5 sm:py-2 border border-transparent text-xs sm:text-sm font-medium rounded-full text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 shadow-sm hover:shadow-md">
-                    View Details
-                  </button>
+                  <a 
+                    href={participant.profile_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center px-2 sm:px-4 py-1.5 sm:py-2 border border-transparent text-xs sm:text-sm font-medium rounded-full text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 shadow-sm hover:shadow-md"
+                  >
+                    View Profile
+                  </a>
                 </td>
               </tr>
             ))}
