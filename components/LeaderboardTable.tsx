@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import Image from 'next/image';
 
 interface Participant {
   id: number;
@@ -183,9 +184,11 @@ export default function LeaderboardTable({ participants, searchQuery = '' }: Lea
                 <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-sm text-gray-900">
                   <div className="flex items-center justify-center">
                     {participant.profile_icon && participant.profile_icon.trim() !== '' ? (
-                      <img 
+                      <Image 
                         src={participant.profile_icon} 
                         alt={`${participant.name} profile`}
+                        width={40}
+                        height={40}
                         className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover border-2 border-gray-200"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;

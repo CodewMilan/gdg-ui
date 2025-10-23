@@ -10,6 +10,7 @@ export interface Participant {
   id: number
   name: string
   profile_icon: string
+  profile_link: string
   points: number
   rank: number
   badges: number
