@@ -28,7 +28,7 @@ export default function FloatingNavbar() {
   }, [lastScrollY]);
 
   const navItems = [
-    { name: 'Home', href: '/dashboard', icon: '' },
+    { name: 'Home', href: '/home', icon: '' },
     { name: 'Leaderboard', href: '/dashboard', icon: '' },
     { name: 'Syllabus', href: '/syllabus', icon: '' },
   ];
@@ -42,8 +42,7 @@ export default function FloatingNavbar() {
       <div className="bg-white/90 backdrop-blur-md border border-gray-200 rounded-full shadow-lg px-6 py-3">
         <div className="flex items-center space-x-8">
           {navItems.map((item) => {
-            const isActive = pathname === item.href || 
-              (item.name === 'Leaderboard' && pathname === '/dashboard');
+            const isActive = pathname === item.href;
             
             return (
               <Link

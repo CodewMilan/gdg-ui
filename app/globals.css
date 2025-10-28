@@ -80,3 +80,41 @@ body {
 .animate-pulse-slow {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+/* Google-style bouncing loader */
+@keyframes google-bounce {
+  0% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(5px);
+  }
+}
+
+.google-loader {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  animation: google-bounce 1s ease-in-out infinite alternate;
+}
+
+.google-loader:nth-child(1) {
+  background: #008ae6;
+  animation-delay: -0.25s;
+}
+
+.google-loader:nth-child(2) {
+  background: #e60000;
+  animation-delay: -0.5s;
+}
+
+.google-loader:nth-child(3) {
+  background: #ffcc00;
+  animation-delay: -0.75s;
+}
+
+.google-loader:nth-child(4) {
+  background: #008800;
+  animation-delay: -1s;
+}
