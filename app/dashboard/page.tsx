@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Header from '../../components/Header';
-// import StatCard from '../../components/StatCard';
-// import TierProgress from '../../components/TierProgress';
+import StatCard from '../../components/StatCard';
 import SearchBar from '../../components/SearchBar';
 import LeaderboardTable from '../../components/LeaderboardTable';
 import { fetchLeaderboard, searchParticipants, Participant } from '../../lib/supabase';
@@ -32,6 +31,25 @@ export default function Dashboard() {
       setIsLoading(false);
     }
   };
+
+  // Calculate statistics from participants data
+  const calculateStats = () => {
+    const totalParticipants = participants.length;
+    const totalBadges = participants.reduce((sum, participant) => sum + participant.badges, 0);
+    const completedParticipants = participants.filter(p => p.badges >= 20).length;
+    const averageProgress = totalParticipants > 0 ? Math.round(totalBadges / totalParticipants) : 0;
+    const above50Percent = participants.filter(p => p.badges >= 10).length;
+
+    return {
+      totalParticipants,
+      totalBadges,
+      completedParticipants,
+      averageProgress,
+      above50Percent
+    };
+  };
+
+  const stats = calculateStats();
 
   const handleSearch = useCallback(async (query: string) => {
     setSearchQuery(query);
@@ -89,33 +107,49 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Stats Section - Commented Out */}
-        {/* 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+        {/* Stats Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <StatCard
-            title="No of Eligible Participants for Swags"
-            value={eligibleForSwags}
+            title="Above 50% Progress"
+            value={stats.above50Percent}
+            color="blue"
+            icon={
+              <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
+              </svg>
+            }
+          />
+          <StatCard
+            title="Total Badges Earned"
+            value={stats.totalBadges.toLocaleString()}
+            color="yellow"
+            icon={
+              <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+            }
+          />
+          <StatCard
+            title="Completed (20/20)"
+            value={stats.completedParticipants}
             color="green"
             icon={
-              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
             }
-            delay={200}
           />
           <StatCard
-            title="Total No of Participants"
-            value={totalParticipants}
-            color="blue"
+            title="Average Progress"
+            value={stats.averageProgress}
+            color="purple"
             icon={
-              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+              <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
               </svg>
             }
-            delay={400}
           />
         </div>
-        */}
 
         {/* Campaign Tier Progress - Commented Out */}
         {/*

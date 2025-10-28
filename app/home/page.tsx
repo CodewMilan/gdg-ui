@@ -2,8 +2,33 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState, useEffect } from 'react';
+import { fetchLeaderboard, Participant } from '@/lib/supabase';
 
 export default function HomePage() {
+  const [participants, setParticipants] = useState<Participant[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const data = await fetchLeaderboard();
+        setParticipants(data);
+      } catch (error) {
+        console.error('Error loading leaderboard data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  // Calculate metrics from leaderboard data
+  const totalParticipants = participants.length;
+  const tier1Achieved = totalParticipants >= 100;
+  const tier2Achieved = totalParticipants >= 70;
+  const tier3Achieved = totalParticipants >= 50;
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
       {/* Hero Section */}
@@ -18,14 +43,14 @@ export default function HomePage() {
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
           <div className="text-center">
-            {/* Google Cloud Logo */}
+            {/* GDG Logo */}
             <div className="mb-8">
               <Image
-                src="https://cloud.google.com/_static/cloud/images/social-icon-google-cloud-1200-630.png"
-                alt="Google Cloud"
-                width={200}
-                height={100}
-                className="mx-auto h-16 w-auto"
+                src="/gdglogobms.png"
+                alt="GDG BMS Institute of Technology"
+                width={300}
+                height={120}
+                className="mx-auto h-20 w-auto"
                 priority
               />
             </div>
@@ -63,7 +88,7 @@ export default function HomePage() {
                 <div className="text-gray-600">Weeks</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-2">100+</div>
+                <div className="text-3xl font-bold text-blue-600 mb-2">{totalParticipants}</div>
                 <div className="text-gray-600">Participants</div>
               </div>
               <div className="text-center">
@@ -75,54 +100,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Why Choose Our Study Jams?
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Comprehensive learning experience designed by Google Cloud experts
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Feature 1 */}
-            <div className="text-center p-6 rounded-xl bg-blue-50 hover:bg-blue-100 transition-colors duration-200">
-              <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Hands-on Learning</h3>
-              <p className="text-gray-600">Practical labs and real-world projects to build your skills</p>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="text-center p-6 rounded-xl bg-green-50 hover:bg-green-100 transition-colors duration-200">
-              <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Expert Mentors</h3>
-              <p className="text-gray-600">Learn from certified Google Cloud professionals</p>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="text-center p-6 rounded-xl bg-purple-50 hover:bg-purple-100 transition-colors duration-200">
-              <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Certification Ready</h3>
-              <p className="text-gray-600">Prepare for Google Cloud certification exams</p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Technologies Section */}
       <section className="py-16 bg-gray-50">
@@ -138,17 +115,210 @@ export default function HomePage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
             {[
-              'Compute Engine', 'Cloud Storage', 'BigQuery', 'Kubernetes',
-              'Cloud Functions', 'Cloud SQL', 'AutoML', 'Cloud Build',
-              'Cloud Run', 'Cloud CDN', 'Cloud IAM', 'Cloud Monitoring'
+              { name: 'Compute Engine', icon: '🖥️' },
+              { name: 'Cloud Storage', icon: '💾' },
+              { name: 'BigQuery', icon: '📊' },
+              { name: 'Kubernetes', icon: '⚙️' },
+              { name: 'Cloud Functions', icon: '⚡' },
+              { name: 'Cloud SQL', icon: '🗄️' },
+              { name: 'AutoML', icon: '🤖' },
+              { name: 'Cloud Build', icon: '🔨' },
+              { name: 'Cloud Run', icon: '🏃' },
+              { name: 'Cloud CDN', icon: '🌐' },
+              { name: 'Cloud IAM', icon: '🔐' },
+              { name: 'Cloud Monitoring', icon: '📈' }
             ].map((tech, index) => (
               <div key={index} className="bg-white rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-shadow duration-200">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-2">
-                  <span className="text-blue-600 font-semibold text-sm">{tech.split(' ')[0][0]}</span>
+                <div className="w-12 h-12 mx-auto mb-2 flex items-center justify-center text-2xl">
+                  {tech.icon}
                 </div>
-                <p className="text-sm font-medium text-gray-700">{tech}</p>
+                <p className="text-sm font-medium text-gray-700">{tech.name}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Swag Tiers Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              Participant Rewards
+            </h2>
+            <p className="text-lg text-gray-600">
+              Complete courses and earn amazing rewards
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Tier 1 - Ultimate Prize Pack */}
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-shadow duration-300 flex flex-col">
+              <div className="text-center mb-6">
+                <Image
+                  src="/tier1.png"
+                  alt="Ultimate Prize Pack"
+                  width={200}
+                  height={150}
+                  className="mx-auto mb-4 rounded-lg"
+                />
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Ultimate Prize Pack</h3>
+                <p className="text-sm text-gray-600">Target: First 100 Students</p>
+              </div>
+              
+              <div className="flex-grow mb-6">
+                <h4 className="font-semibold text-gray-900 mb-3">Requirements:</h4>
+                <p className="text-sm text-gray-600 mb-4">Complete all 20 courses + Send proof in WhatsApp group</p>
+                
+                <h4 className="font-semibold text-gray-900 mb-3">Rewards:</h4>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li className="flex items-center">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Google Cloud Bag
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Google Cloud T-Shirt
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Google Cloud Bottle
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Stickers & Goodies
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Certificate of Participation
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Digital Badges
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Easy Access to All GDG OC Events
+                  </li>
+                </ul>
+              </div>
+              
+              <button className={`w-full font-semibold py-3 px-4 rounded-lg transition-colors duration-200 mt-auto ${
+                tier1Achieved 
+                  ? 'bg-gray-500 text-white cursor-not-allowed' 
+                  : 'bg-yellow-500 hover:bg-yellow-600 text-white'
+              }`}>
+                {tier1Achieved ? 'ACHIEVED!' : 'Be in Top 100!'}
+              </button>
+            </div>
+
+            {/* Tier 2 - Advanced Rewards */}
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-shadow duration-300 flex flex-col">
+              <div className="text-center mb-6">
+                <Image
+                  src="/tier2.png"
+                  alt="Advanced Rewards"
+                  width={200}
+                  height={150}
+                  className="mx-auto mb-4 rounded-lg"
+                />
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Advanced Rewards</h3>
+                <p className="text-sm text-gray-600">Target: First 70 Students</p>
+              </div>
+              
+              <div className="flex-grow mb-6">
+                <h4 className="font-semibold text-gray-900 mb-3">Requirements:</h4>
+                <p className="text-sm text-gray-600 mb-4">Complete all 20 courses + Send proof in WhatsApp group</p>
+                
+                <h4 className="font-semibold text-gray-900 mb-3">Rewards:</h4>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li className="flex items-center">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Google Cloud T-Shirt
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Google Cloud Bottle
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Stickers & Goodies
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Certificate of Participation
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Digital Badges
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Easy Access to All GDG OC Events
+                  </li>
+                </ul>
+              </div>
+              
+              <button className={`w-full font-semibold py-3 px-4 rounded-lg transition-colors duration-200 mt-auto ${
+                tier2Achieved 
+                  ? 'bg-gray-500 text-white cursor-not-allowed' 
+                  : 'bg-blue-500 hover:bg-blue-600 text-white'
+              }`}>
+                {tier2Achieved ? 'ACHIEVED!' : 'Be in Top 70!'}
+              </button>
+            </div>
+
+            {/* Tier 3 - Starter Rewards */}
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-shadow duration-300 flex flex-col">
+              <div className="text-center mb-6">
+                <Image
+                  src="/tier3.png"
+                  alt="Starter Rewards"
+                  width={200}
+                  height={150}
+                  className="mx-auto mb-4 rounded-lg"
+                />
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Starter Rewards</h3>
+                <p className="text-sm text-gray-600">Target: First 50 Students</p>
+              </div>
+              
+              <div className="flex-grow mb-6">
+                <h4 className="font-semibold text-gray-900 mb-3">Requirements:</h4>
+                <p className="text-sm text-gray-600 mb-4">Complete all 20 courses + Send proof in WhatsApp group</p>
+                
+                <h4 className="font-semibold text-gray-900 mb-3">Rewards:</h4>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li className="flex items-center">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Google Cloud T-Shirt
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Stickers & Goodies
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Certificate of Participation
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Digital Badges
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Easy Access to All GDG OC Events
+                  </li>
+                </ul>
+              </div>
+              
+              <button className={`w-full font-semibold py-3 px-4 rounded-lg transition-colors duration-200 mt-auto ${
+                tier3Achieved 
+                  ? 'bg-gray-500 text-white cursor-not-allowed' 
+                  : 'bg-orange-500 hover:bg-orange-600 text-white'
+              }`}>
+                {tier3Achieved ? 'ACHIEVED!' : 'Be in Top 50!'}
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -184,7 +354,15 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <h3 className="text-lg font-semibold mb-4">GDG BMSIT</h3>
+              <div className="mb-4">
+                <Image
+                  src="/gdglogobms.png"
+                  alt="GDG BMS Institute of Technology"
+                  width={200}
+                  height={80}
+                  className="h-16 w-auto"
+                />
+              </div>
               <p className="text-gray-400">
                 Google Developer Group at BMS Institute of Technology, empowering students with cutting-edge technology.
               </p>
