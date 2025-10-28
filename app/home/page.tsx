@@ -208,7 +208,7 @@ export default function HomePage() {
                   ? 'bg-gray-500 text-white cursor-not-allowed' 
                   : 'bg-yellow-500 hover:bg-yellow-600 text-white'
               }`}>
-                {tier1Achieved ? 'ACHIEVED!' : 'Be in Top 100!'}
+                {tier1Achieved ? 'Target Reached' : 'Be in Top 100!'}
               </button>
             </div>
 
@@ -264,7 +264,7 @@ export default function HomePage() {
                   ? 'bg-gray-500 text-white cursor-not-allowed' 
                   : 'bg-blue-500 hover:bg-blue-600 text-white'
               }`}>
-                {tier2Achieved ? 'ACHIEVED!' : 'Be in Top 70!'}
+                {tier2Achieved ? 'Target Reached' : 'Be in Top 70!'}
               </button>
             </div>
 
@@ -316,7 +316,7 @@ export default function HomePage() {
                   ? 'bg-gray-500 text-white cursor-not-allowed' 
                   : 'bg-orange-500 hover:bg-orange-600 text-white'
               }`}>
-                {tier3Achieved ? 'ACHIEVED!' : 'Be in Top 50!'}
+                {tier3Achieved ? 'Target Reached' : 'Be in Top 50!'}
               </button>
             </div>
           </div>
