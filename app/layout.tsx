@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import FloatingNavbar from "@/components/FloatingNavbar";
 
 // Google Sans is loaded via CSS import in globals.css
 
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-sans antialiased bg-white text-gray-900">
+        <FloatingNavbar />
         {children}
       </body>
     </html>
