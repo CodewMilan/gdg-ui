@@ -203,12 +203,10 @@ export default function HomePage() {
                 </ul>
               </div>
               
-              <button className={`w-full font-semibold py-3 px-4 rounded-lg transition-colors duration-200 mt-auto ${
-                tier1Achieved 
-                  ? 'bg-gray-500 text-white cursor-not-allowed' 
-                  : 'bg-yellow-500 hover:bg-yellow-600 text-white'
-              }`}>
-                {tier1Achieved ? 'Target Reached' : 'Be in Top 100!'}
+              <button className={`w-full font-semibold py-3 px-4 rounded-lg transition-colors duration-200 mt-auto 
+                bg-yellow-500 hover:bg-yellow-600 text-white
+              `}>
+                Open
               </button>
             </div>
 
@@ -259,12 +257,10 @@ export default function HomePage() {
                 </ul>
               </div>
               
-              <button className={`w-full font-semibold py-3 px-4 rounded-lg transition-colors duration-200 mt-auto ${
-                tier2Achieved 
-                  ? 'bg-gray-500 text-white cursor-not-allowed' 
-                  : 'bg-blue-500 hover:bg-blue-600 text-white'
-              }`}>
-                {tier2Achieved ? 'Target Reached' : 'Be in Top 70!'}
+              <button className={`w-full font-semibold py-3 px-4 rounded-lg transition-colors duration-200 mt-auto 
+                bg-blue-500 hover:bg-blue-600 text-white
+              `}>
+                Open
               </button>
             </div>
 
@@ -311,12 +307,10 @@ export default function HomePage() {
                 </ul>
               </div>
               
-              <button className={`w-full font-semibold py-3 px-4 rounded-lg transition-colors duration-200 mt-auto ${
-                tier3Achieved 
-                  ? 'bg-gray-500 text-white cursor-not-allowed' 
-                  : 'bg-orange-500 hover:bg-orange-600 text-white'
-              }`}>
-                {tier3Achieved ? 'Target Reached' : 'Be in Top 50!'}
+              <button className={`w-full font-semibold py-3 px-4 rounded-lg transition-colors duration-200 mt-auto 
+                bg-orange-500 hover:bg-orange-600 text-white
+              `}>
+                Open
               </button>
             </div>
           </div>
