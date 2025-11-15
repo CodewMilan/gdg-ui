@@ -26,12 +26,12 @@ export default function LeaderboardTable({ participants, searchQuery = '' }: Lea
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
   const filteredParticipants = useMemo(() => {
-    // First filter to only show participants with rank <= 100
-    const top100RankedParticipants = participants.filter(participant => participant.rank <= 100);
+    // First filter to only show participants with rank <= 150
+    const top150RankedParticipants = participants.filter(participant => participant.rank <= 150);
     
-    if (!searchQuery) return top100RankedParticipants;
+    if (!searchQuery) return top150RankedParticipants;
     
-    return top100RankedParticipants.filter(participant =>
+    return top150RankedParticipants.filter(participant =>
       participant.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [participants, searchQuery]);
